@@ -34,6 +34,7 @@ image.show()
 This project is actively being reverse-engineered and developed. The XML structures used by Excel's Place in Cell feature are still being documented and tested across workbook versions.
 Development Roadmap
 
+#### To-Do:
 - Parse workbook relationships
 - Parse Rich Data records
 - Map cells to image resources

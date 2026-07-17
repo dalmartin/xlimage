@@ -1,3 +1,8 @@
+# Manual testing
+*.xlsx
+*.xlsm
+*.xls
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

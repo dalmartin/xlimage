@@ -2,6 +2,13 @@ from xml.etree.ElementTree import Element
 
 from workbook_parser import WorkbookParser
 
+################### Namespace Constant for XML parsing #################
+NS = {
+    "main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+    "rvr": "http://schemas.microsoft.com/office/spreadsheetml/2022/richvaluerel",
+    "relations": "http://schemas.openxmlformats.org/package/2006/relationships",
+}
+########################################################################
 
 class ImageLoader:
 
@@ -10,7 +17,12 @@ class ImageLoader:
         self.sheetcellIMG: dict[tuple[str, str], str]
 
         #Intermediate dictionaries:
-        self.cellToVM: dict[str, str] = {}
+        self.cellToVM: dict[tuple[str, str], str] = {}
+        self.cellToV : dict[tuple[str, str], str] = {}
+        self.cellToRID : dict[tuple[str, str], str] = {}
+
+        # Final dict that contains cell, sheet -> image path
+        self.cellToPath: dict[tuple[str, str], str] = {}
 
     def getVMs(self):
         # populate self.sheetcellIMG with mappings of (sheet, cell) -> img path
@@ -20,9 +32,6 @@ class ImageLoader:
         # richValueRel.xml -> richValueRels[v].id -> rId
         # rels/richValueRel.xml.rels -> Relationsihps[rId].Target -> Img path
 
-        NS = {
-            "main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
-        }
 
         for sheet in self.parser.getSheets():
             # get sheet name
@@ -41,21 +50,54 @@ class ImageLoader:
                 if vm is not None:
                     self.cellToVM[(sheetName, cell.get('r'))] = vm
 
-            return
-
-    #TODO implement getV
     def getV(self):
-        pass
+        # get the metadata parsed
+        data = self.parser.getData("xl/metadata.xml")
+        idxV: dict[int, str] = {}
 
-    #TODO implement getRID
+        # populate a metadata value index to a metadata value
+        for i, rc in enumerate(data.findall(".//main:rc", NS)):
+            v = rc.get("v")
+            if v:
+                idxV[i+1] = v
+
+        # populate cell to metadata value
+        for cell, vm in self.cellToVM.items():
+            self.cellToV[cell] = idxV[int(vm)]
+
     def getRID(self):
-        pass
+        # get rich value relation data
+        data = self.parser.getData("xl/richData/richValueRel.xml")
+        idxRID: dict[int, str] = {}
 
-    #TODO implement getImgPath
+        for i, rel in enumerate(data.findall(".//rvr:rel", NS)):
+            rid = rel.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
+            if rid:
+                idxRID[i] = rid
+
+        for cell, v in self.cellToV.items():
+            self.cellToRID[cell] = idxRID[int(v)]
+
     def getImgPath(self):
-        pass
+        # get rich value relationships (actual path to images)
+        data = self.parser.getData("xl/richData/_rels/richValueRel.xml.rels")
+        ridImgPath: dict[str, str] = {}
+
+        for relation in data.findall(".//relations:Relationship", NS):
+            rid = relation.get("Id")
+            path = relation.get("Target")
+            if rid and path and relation.get("Type") == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image":
+                ridImgPath[rid] = path
+
+        for cell, rId in self.cellToRID.items():
+            self.cellToPath[cell] = ridImgPath[rId]
+
+
+        print(self.cellToPath)
 
 if __name__ == '__main__':
     il = ImageLoader('testing_excel_files/test2.xlsx')
-    il.getImgPaths()
-    print(il.cellToVM)
+    il.getVMs()
+    il.getV()
+    il.getRID()
+    il.getImgPath()

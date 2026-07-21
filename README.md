@@ -4,39 +4,29 @@ A Python library for extracting **Excel "Place in Cell" images** from `.xlsx` fi
 
 ## Overview
 
-Microsoft 365 introduced the **Place in Cell** feature, allowing images to be stored directly within worksheet cells rather than as floating drawing objects. While several Python libraries support traditional Excel images, support for Place in Cell images is currently limited.
+Microsoft 365 introduced the **Place in Cell** feature, allowing images to be stored directly within worksheet cells rather than as floating drawing objects. While several Python libraries support traditional Excel images, there is currently no library that parses the xml to get these images. This is a lightweight library that allows users to extract such images by providing only a sheet and cell. It's possible that more features will be added to this as they come up, feel free to submit an issue if you have a suggestion or have a suggestion going forward.
 
-`xlimage` aims to provide a simple API for locating, extracting, and working with these images in Python.
+`xlimage` aims to provide a simple API for locating, extracting, and working with images stored in excel files through Python.
 
-## Goals
-
-- Read Place in Cell images from `.xlsx` files
-- Map worksheet cells to their corresponding images
-- Return images as Pillow (`PIL.Image`) objects
-- Support multiple worksheets
-- Expose image metadata and relationships
-- Be lightweight and dependency-friendly
-
-## Planned API
+## API
 
 ```python
-from xlimage import CellImageReader
+from xlimage import ImageLoader
 
-reader = CellImageReader("workbook.xlsx")
+xli = ImageLoader("workbook.xlsx")
 
-image = reader.get_image("Sheet1", "A1")
+# Get an image represented as bytes with .get_image()
+image = xli.get_image("Sheet1", "A1")
 
-image.show()
+# Save the image, use Pillow to work with it, or anything else.
+
 ```
 
 ## Current Status
-#### Work in Progress
-This project is actively being reverse-engineered and developed. The XML structures used by Excel's Place in Cell feature are still being documented and tested across workbook versions.
-Development Roadmap
+**Working**
+This is still in development, and will likely be an ongoing project if there is significant interest. As of now, the base functionality is working.
 
-#### To-Do for v1.0:
-- Extract images from /xl/media
-- Pillow integration
+#### Roadmap for now 
 - Unit tests
 - PyPI package release
 - Documentation and examples

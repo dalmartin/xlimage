@@ -1,5 +1,5 @@
-from zipfile import ZipFile
 import xml.etree.ElementTree as ET
+from zipfile import ZipFile
 
 #######################################################################
 # WorkbookParser is a simple class that opens a workbook and parses it 
@@ -44,18 +44,24 @@ class WorkbookParser:
         self.parsefiles: list[str] = METADATAFILES + self.sheets
         
         for parsefile in self.parsefiles:
-            self.readXml(parsefile)
+            self._readXml(parsefile)
+
+        # Populate data paths
+        self._getVMs()
+        self._getV()
+        self._getRID()
+        self._getImgPath()
 
     ######## Eager load information (except for image bytes) from the workbook
 
-    def readXml(self, path: str):
+    def _readXml(self, path: str):
         bytes = self.zip.read(path)
         root = ET.fromstring(bytes)
         self.parsed[path] = root
 
-    def getVMs(self):
+    def _getVMs(self):
         # populate self.sheetcellIMG with mappings of (sheet, cell) -> img path
-        for sheet in self.getSheets():
+        for sheet in self.sheets:
             # get sheet name
             sheetName: str = ""
             i_start: int = sheet.find("xl/worksheets/") + len("xl/worksheets/")
@@ -73,7 +79,7 @@ class WorkbookParser:
                 if vm is not None and cell is not None:
                     self.cellToVM[(sheetName, cell)] = vm
 
-    def getV(self):
+    def _getV(self):
         # get the metadata parsed
         data = self.getData("xl/metadata.xml")
         idxV: dict[int, str] = {}
@@ -88,7 +94,7 @@ class WorkbookParser:
         for cell, vm in self.cellToVM.items():
             self.cellToV[cell] = idxV[int(vm)]
 
-    def getRID(self):
+    def _getRID(self):
         # get rich value relation data
         data = self.getData("xl/richData/richValueRel.xml")
         idxRID: dict[int, str] = {}
@@ -101,8 +107,8 @@ class WorkbookParser:
         for cell, v in self.cellToV.items():
             self.cellToRID[cell] = idxRID[int(v)]
 
-    def getImgPath(self):
-        # get rich value relationships (actual path to images)
+    def _getImgPath(self):
+        # _get rich value relationships (actual path to images)
         data = self.getData("xl/richData/_rels/richValueRel.xml.rels")
         ridImgPath: dict[str, str] = {}
 
@@ -120,21 +126,20 @@ class WorkbookParser:
 
     ######## API for the ImageLoader to retrieve cached information (getters)
 
-    def getData(self, path: str):
+    def getData(self, path: str) -> ET.Element:
         if path not in self.parsed:
             raise KeyError(f"Cannot retrieve xml data for the following file: {path}. specified path has not been parsed")
 
         return self.parsed[path]
 
-    def getImage(self, sheetCell: tuple[str, str]):
+    def getImage(self, sheetCell: tuple[str, str]) -> bytes:
         file = self.cellToPath[(sheetCell)]
 
         if file not in self.images:
-            img: bytes = self.zip.read(f"xl/media/{file})")
+            img: bytes = self.zip.read(f"xl/media/{file}")
             if img:
                 self.images[file] = img
             else:
                 raise FileNotFoundError(f"Could not access image: {file}. Please check that this exists before attempting to access.")
         
         return self.images[file]
-

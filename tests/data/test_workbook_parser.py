@@ -1,4 +1,5 @@
 from xlimage.workbook_parser import WorkbookParser
+
 import pytest
 
 class TestWorkbookParser:
@@ -40,10 +41,10 @@ class TestWorkbookParser:
             _ = wbp.getData("lol")
 
     def test_hasImage(self, wbp: WorkbookParser):
-        assert wbp.hasImage(("sheet1", "C4")) == True
+        assert wbp.hasImage(("sheet1", "C4"))
 
     def test_hasImageFalse(self, wbp: WorkbookParser):
-        assert wbp.hasImage(("sheet1", "A1")) == False
+        assert wbp.hasImage(("sheet1", "A1"))
 
     def test_getImage(self, wbp: WorkbookParser):
         assert wbp.getImage(("sheet1", "C4")) is not None

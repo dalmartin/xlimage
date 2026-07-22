@@ -18,18 +18,18 @@ To use xlimage, install it to your environment (see above) and import the ImageL
 
 - ImageLoader(workbook_path: str)
     - Constructor for an ImageLoader that takes the workbook at the provided path and runs it through a parser to map cells with images to image filepaths.
-    - `workbook_path`: a string that represents the file path for the `workbook` to be parsed. All subsequent functino calls work off of this `workbook`.
+    - `workbook_path`: a string that represents the file path for the `workbook` to be parsed. All subsequent function calls work off of this `workbook`.
 
 - hasImage(sheet: str, cell: str) -> bool
     - has_image will return True if the given cell contains an image, and False otherwise.
     - `sheet`: string that represents the target worksheet's name (should be in the `workbook` provided on initialization) e.g. "sheet1"
-    - `cell`: Should be a string that represents the target `cell` in `sheet`
+    - `cell`: Should be a string that represents the target `cell` in `sheet`. e.g. "A1"
 
 - getImage(sheet: str, cell: str) -> bytes
     - get_image will raise an exception if there is no image in the given cell. If there is an image, it will return that image as a bytes object.
     - The image bytes can be easily converted into a Pillow image, for example, written to filesystem, etc.
     - `sheet`: string that represents the target worksheet's name (should be in the `workbook` provided on initialization) e.g. "sheet1"
-    - `cell`: Should be a string that represents the target `cell` in `sheet`
+    - `cell`: Should be a string that represents the target `cell` in `sheet`. e.g. "A1"
 
 ## Example
 ```python
@@ -51,12 +51,11 @@ if check:
 ```
 
 ## Current Status
-**Working**
-This is still in development, and will likely be an ongoing project if there is significant interest. As of now, the base functionality is working.
+Working version is available through PyPi. Current plan is to continue updating this with new features as needed and fix any bugs that come up.
 
 ## Contributing
 Contributions, sample workbooks, bug reports, and format analysis are welcome.
-Please submit an issue if you come across a bug or new feature that you'd like to see implemented
+Please submit an issue if you come across a bug or new feature that you'd like to see implemented.
 
 ## License
 GNU GENERAL PUBLIC LICENSE v3.0

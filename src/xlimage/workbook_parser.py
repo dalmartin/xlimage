@@ -132,7 +132,13 @@ class WorkbookParser:
 
         return self.parsed[path]
 
+    def hasImage(self, sheetCell: tuple[str, str]) -> bool:
+        return sheetCell in self.cellToPath
+
     def getImage(self, sheetCell: tuple[str, str]) -> bytes:
+        if not self.hasImage(sheetCell):
+            raise KeyError(f"Attempted to access an image from a cell that does not contain an image: {sheetCell}.")
+
         file = self.cellToPath[(sheetCell)]
 
         if file not in self.images:

@@ -1,4 +1,4 @@
-from workbook_parser import WorkbookParser
+from xlimage.workbook_parser import WorkbookParser
 
 ######################################################################
 # ImageLoader is currently a neat wrapper for WorkbookParser. In the

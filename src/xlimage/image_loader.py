@@ -10,7 +10,11 @@ from xlimage.workbook_parser import WorkbookParser
 class ImageLoader:
 
     def __init__(self, path_to_workbook: str):
+
         self.wbp: WorkbookParser = WorkbookParser(path_to_workbook)
 
-    def get_image(self, sheet: str, cell: str):
+    def getImage(self, sheet: str, cell: str) -> bytes:
         return self.wbp.getImage((sheet, cell))
+
+    def hasImage(self, sheet: str, cell: str) -> bool:
+        return self.wbp.hasImage((sheet, cell))

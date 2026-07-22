@@ -9,6 +9,22 @@ description="Efficiently read images stored in Excel with Python."
 readme="README.md"
 requires-python = ">=3.10"
 authors=[{ name="Daniel Martin", email ="danielamartin314@gmail.com" }]
+license="GPL-3.0-or-later"
+license-files=["LICENSE"]
+classifiers= [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: OS Independent",
+  "Topic :: Office/Business :: Financial :: Spreadsheet",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/dalmartin/xlimage"
+"Bug Tracker" = "https://github.com/dalmartin/xlimage/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff"]

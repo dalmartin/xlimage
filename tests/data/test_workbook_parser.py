@@ -1,4 +1,4 @@
-from xlimage.workbook_parser import WorkbookParser
+from xlcellimage.workbook_parser import WorkbookParser
 
 import pytest
 

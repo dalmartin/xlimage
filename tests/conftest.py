@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from xlimage.workbook_parser import WorkbookParser
+from xlcellimage.workbook_parser import WorkbookParser
 
 DATA = Path(__file__).parent / "data"
 

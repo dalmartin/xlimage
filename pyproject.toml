@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name="xlimage"
+name="xlcellimage"
 version="0.1.0"
-description="Efficiently read images stored in Excel with Python."
+description="Efficiently read images stored in Excel cells with Python."
 readme="README.md"
 requires-python = ">=3.10"
 authors=[{ name="Daniel Martin", email ="danielamartin314@gmail.com" }]
@@ -23,8 +23,8 @@ classifiers= [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/dalmartin/xlimage"
-"Bug Tracker" = "https://github.com/dalmartin/xlimage/issues"
+"Homepage" = "https://github.com/dalmartin/xlcellimage"
+"Bug Tracker" = "https://github.com/dalmartin/xlcellimage/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff"]

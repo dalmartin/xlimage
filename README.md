@@ -1,4 +1,4 @@
-# xlimage
+# xlcellimage
 
 A **Python** library for extracting **images** from **Excel** files.
 
@@ -6,19 +6,19 @@ A **Python** library for extracting **images** from **Excel** files.
 
 Microsoft 365 introduced the **Place in Cell** feature, allowing images to be stored directly within worksheet cells rather than as floating drawing objects. While several Python libraries support traditional Excel images, there is currently no library that parses the xml to get these images stored within cells. This is a lightweight library that allows users to extract such images by providing only a sheet and cell. It's possible that more features will be added to this as they come up, feel free to submit an issue if you find a bug or have a suggestion going forward.
 
-With no dependencies (pure stdlib), xlimage is extremely lightweight. This project started due to a lack of maintained python-excel libraries, so it doesn't rely on them to work. `xlimage` aims to provide a simple API for locating, extracting, and working with images stored in excel files through Python.
+With no dependencies (pure stdlib), xlcellimage is extremely lightweight. This project started due to a lack of maintained python-excel libraries, so it doesn't rely on them to work. `xlcellimage` aims to provide a simple API for locating, extracting, and working with images stored in excel files through Python.
 
 ## Install
 ```bash
-pip install xlimage
+pip install xlcellimage
 
 ```
 ## Use
-To use xlimage, install it to your environment (see above) and import the ImageLoader class. Below is a quick guide on initializing an ImageLoader object and using its methods.
+To use xlcellimage, install it to your environment (see above) and import the ImageLoader class. Below is a quick guide on initializing an ImageLoader object and using its methods.
 
-- ImageLoader(workbook_path: str)
+- ImageLoader(path_to_workbook: str)
     - Constructor for an ImageLoader that takes the workbook at the provided path and runs it through a parser to map cells with images to image filepaths.
-    - `workbook_path`: a string that represents the file path for the `workbook` to be parsed. All subsequent functino calls work off of this `workbook`.
+    - `path_to_workbook`: a string that represents the file path for the `workbook` to be parsed. All subsequent functino calls work off of this `workbook`.
 
 - hasImage(sheet: str, cell: str) -> bool
     - has_image will return True if the given cell contains an image, and False otherwise.
@@ -33,7 +33,7 @@ To use xlimage, install it to your environment (see above) and import the ImageL
 
 ## Example
 ```python
-from xlimage import ImageLoader
+from xlcellimage import ImageLoader
 
 # Initialize an ImageLoader. This parses the given workbook, and maps cells to image paths.
 xli = ImageLoader("workbook.xlsx")
